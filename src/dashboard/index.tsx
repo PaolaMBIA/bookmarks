@@ -1,14 +1,13 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { useFetch } from "../hook/useFetch";
 
 function Dashboard() {
   const [url, setUrl] = useState<string>("");
+  const [{ state, error, loading }, fetchData] = useFetch();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetch(`${process.env.REACT_APP_API_URL}/embed?dataType=json&url=${url}`)
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-
+    fetchData(url);
     setUrl("");
   };
 
