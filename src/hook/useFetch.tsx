@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 type FetchResponse = [
   {
@@ -6,15 +6,16 @@ type FetchResponse = [
     loading: boolean;
     error: boolean;
   },
-  (url: string) => Promise<void>
+  (url: string | undefined) => Promise<void>
 ];
 
 export const useFetch = (): FetchResponse => {
   const [state, setState] = useState({});
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
-  const fetchData = useCallback(async (url) => {
+  console.log("cc");
+  const fetchData = async (url: string | undefined) => {
     setError(false);
     setLoading(true);
 
@@ -22,16 +23,29 @@ export const useFetch = (): FetchResponse => {
       const result = await (
         await fetch(`https://noembed.com/embed?dataType=json&url=${url}`)
       ).json();
+
       setState(result);
     } catch (error) {
       setError(true);
     }
     setLoading(false);
-  }, []);
+  };
 
-  useEffect(() => {
-    fetchData("");
-  }, [fetchData]);
+  // useCallback(async (url) => {
+  //   setError(false);
+  //   setLoading(true);
+
+  //   try {
+  //     const result = await (
+  //       await fetch(`https://noembed.com/embed?dataType=json&url=${url}`)
+  //     ).json();
+
+  //     setState(result);
+  //   } catch (error) {
+  //     setError(true);
+  //   }
+  //   setLoading(false);
+  // }, []);
 
   return [{ state, loading, error }, fetchData];
 };
