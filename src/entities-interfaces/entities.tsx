@@ -1,20 +1,15 @@
-export interface Video {
-  commonField: Common;
-  duration: string;
-}
-
-export interface Image {
-  commonField: Common;
-  height: number;
-  width: number;
-}
-
-interface Common {
+export interface DataModel {
   id: string;
+  type: string;
+  thumbnail_url: string;
   overview?: string;
   author_name: string;
   url: string;
   title: string;
-  dateAdded: string;
-  dateOfPublication: string;
+  dateAdded?: string;
+  dateOfPublication?: string;
+  html: string;
+  height?: number;
+  width?: number;
+  duration?: string;
 }

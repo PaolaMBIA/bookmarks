@@ -1,18 +1,29 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useFetch } from "../hook/useFetch";
+import { DataModel } from "../entities-interfaces/entities";
+import { fetchData } from "../service/fetchData";
+import BookmarksList from "./BookmarksList";
 
 function Dashboard() {
   const [url, setUrl] = useState<string>("");
-  const [{ state, error, loading }, fetchData] = useFetch();
+  const [bookmarks, setBookmarks] = useState<DataModel[]>([]);
+  let data: DataModel;
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetchData(url);
+
+    if (!bookmarks.find((bookmark) => bookmark.url === url)) {
+      data = await fetchData(url);
+      setBookmarks([...bookmarks, data]);
+    } else {
+      alert("bookmark déjà existant");
+    }
     setUrl("");
   };
 
   return (
     <div className="App">
+      {bookmarks && <BookmarksList bookmarks={bookmarks} />}
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="url">Entrez le lien:</label>
         <input
