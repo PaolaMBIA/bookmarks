@@ -9,20 +9,20 @@ function Dashboard() {
   const [bookmarks, setBookmarks] = useState<DataModel[]>([]);
   const currentInputRef = useRef<{ value: string }>();
 
-  let data: DataModel;
+  let data: DataModel | undefined;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!bookmarks.find((bookmark) => bookmark.url === url)) {
+    if (!bookmarks.find((bookmark) => bookmark?.url === url)) {
       data = await fetchData(url);
-      setBookmarks([...bookmarks, data]);
+      data && setBookmarks([...bookmarks, data]);
     } else {
       alert("bookmark déjà existant");
     }
     setUrl("");
   };
-  //console.log(currentInputRef.current?.value);
+
   return (
     <div className="wrapper">
       <form onSubmit={handleSubmit}>

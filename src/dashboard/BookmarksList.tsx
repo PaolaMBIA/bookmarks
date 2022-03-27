@@ -1,5 +1,5 @@
-import React, { useImperativeHandle } from "react";
-import { Fragment, useEffect, useState } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import { DataModel } from "../entities-interfaces/entities";
 
 interface BookmarksListProps {
@@ -17,15 +17,11 @@ const BookmarksList = React.forwardRef(
 
     const handleDelete = (url: string) => {
       setNewBookMarks(
-        newBookMarks?.filter((bookmark: DataModel) => bookmark.url !== url)
+        newBookMarks?.filter((bookmark) => bookmark?.url !== url)
       );
 
       setUrlDeleted(url);
     };
-
-    // useImperativeHandle(ref, () => ({
-    //   value: urlDeleted,
-    // }));
 
     return (
       <div
@@ -36,17 +32,21 @@ const BookmarksList = React.forwardRef(
           gap: "50px",
         }}
       >
-        {newBookMarks.length !== 0 &&
+        {newBookMarks &&
           newBookMarks.map((bookmark) => (
             <div key={bookmark.url}>
-              <a href={bookmark.url} target="_blank" rel="noreferrer">
-                {bookmark.url}
-              </a>
-              <p>{bookmark.title}</p>
-              <p>{bookmark.author_name}</p>
+              <p>
+                Lien:{" "}
+                <a href={bookmark.url} target="_blank" rel="noreferrer">
+                  {bookmark.url}
+                </a>
+              </p>
+
+              <p>Titre: {bookmark.title}</p>
+              <p>Auteur: {bookmark.author_name}</p>
               {bookmark.type === "photo" ? (
                 <>
-                  <img src={bookmark.thumbnail_url} alt={bookmark.title} />
+                  <img src={bookmark.overView} alt={bookmark.title} />
                   <p>
                     largeur: {bookmark.width}, hauteur: {bookmark.height}
                   </p>
@@ -54,13 +54,17 @@ const BookmarksList = React.forwardRef(
               ) : (
                 bookmark.type === "video" && (
                   <>
-                    <div dangerouslySetInnerHTML={{ __html: bookmark?.html }} />
-                    <p>{bookmark.duration}</p>
-
-                    <p>{bookmark.upload_date}</p>
+                    {bookmark.overView && (
+                      <div
+                        dangerouslySetInnerHTML={{ __html: bookmark.overView }}
+                      />
+                    )}
+                    <p>Durée: {bookmark.duration}</p>
                   </>
                 )
               )}
+              <p>Date de publication: {bookmark.release_time}</p>
+              <p>Date d'ajout dans l'application: {bookmark.upload_date}</p>
               <button onClick={() => handleDelete(bookmark.url)}>
                 Supprimer
               </button>
