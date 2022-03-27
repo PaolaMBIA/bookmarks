@@ -6,7 +6,7 @@ export interface DataModel {
   author_name: string;
   url: string;
   title: string;
-  dateAdded?: string;
+  upload_date?: string;
   dateOfPublication?: string;
   html: string;
   height?: number;

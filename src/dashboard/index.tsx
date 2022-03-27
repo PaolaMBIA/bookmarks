@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import "./index.css";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import { DataModel } from "../entities-interfaces/entities";
 import { fetchData } from "../service/fetchData";
 import BookmarksList from "./BookmarksList";
@@ -6,6 +7,8 @@ import BookmarksList from "./BookmarksList";
 function Dashboard() {
   const [url, setUrl] = useState<string>("");
   const [bookmarks, setBookmarks] = useState<DataModel[]>([]);
+  const currentInputRef = useRef<{ value: string }>();
+
   let data: DataModel;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -19,11 +22,9 @@ function Dashboard() {
     }
     setUrl("");
   };
-
+  //console.log(currentInputRef.current?.value);
   return (
-    <div className="App">
-      {bookmarks && <BookmarksList bookmarks={bookmarks} />}
-
+    <div className="wrapper">
       <form onSubmit={handleSubmit}>
         <label htmlFor="url">Entrez le lien:</label>
         <input
@@ -37,6 +38,10 @@ function Dashboard() {
         />
         <button type="submit">Confirmer</button>
       </form>
+
+      {bookmarks && (
+        <BookmarksList bookmarks={bookmarks} ref={currentInputRef} />
+      )}
     </div>
   );
 }
