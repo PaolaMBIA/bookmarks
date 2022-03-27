@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { DataModel } from "../entities-interfaces/entities";
+import { getDateFormat, getMonth } from "../utils";
 
 interface BookmarksListProps {
   bookmarks: DataModel[];
@@ -64,7 +65,15 @@ const BookmarksList = React.forwardRef(
                 )
               )}
               <p>Date de publication: {bookmark.release_time}</p>
-              <p>Date d'ajout dans l'application: {bookmark.upload_date}</p>
+              {
+                <p>
+                  Date d'ajout dans l'application: le{" "}
+                  {getDateFormat(bookmark.upload_date)[0]}{" "}
+                  {getMonth(getDateFormat(bookmark.upload_date)[1])}{" "}
+                  {getDateFormat(bookmark.upload_date)[2]}
+                </p>
+              }
+
               <button onClick={() => handleDelete(bookmark.url)}>
                 Supprimer
               </button>
