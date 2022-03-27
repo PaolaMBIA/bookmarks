@@ -1,5 +1,5 @@
 import "./index.css";
-import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { DataModel } from "../entities-interfaces/entities";
 import { fetchData } from "../service/fetchData";
 import BookmarksList from "./BookmarksList";
@@ -7,7 +7,6 @@ import BookmarksList from "./BookmarksList";
 function Dashboard() {
   const [url, setUrl] = useState<string>("");
   const [bookmarks, setBookmarks] = useState<DataModel[]>([]);
-  const currentInputRef = useRef<{ value: string }>();
 
   let data: DataModel | undefined;
 
@@ -40,7 +39,7 @@ function Dashboard() {
       </form>
 
       {bookmarks && (
-        <BookmarksList bookmarks={bookmarks} ref={currentInputRef} />
+        <BookmarksList bookmarks={bookmarks} setBookmarks={setBookmarks} />
       )}
     </div>
   );

@@ -1,3 +1,8 @@
+export function getDuration(value: number): string {
+  const result = new Date(value * 1000).toISOString().slice(11, 19);
+  return result;
+}
+
 export function getMonth(value: string): string {
   const month = [
     { number: "01", letter: "Janvier" },
@@ -22,31 +27,58 @@ export function getDateFormat(date: string): Array<string> {
   return newDateFormat;
 }
 
-export function test() {
-  const news = new Date(1646934754 * 1000);
-  let diff = Math.abs(news.getTime() - new Date().getTime());
-  // delta
-  let r = [
-    { year: 0, month: 0, week: 1, day: 2, hour: 34, minute: 56, second: 7 },
-  ]; // result
-  let s = {
-    // structure
+export function getTimeDiff(date: string): string {
+  let newDateFormat = new Date();
+
+  new Date(date).toString() === "Invalid Date"
+    ? (newDateFormat = new Date(parseInt(date) * 1000))
+    : (newDateFormat = new Date(date));
+
+  let timeInSecond = {
     year: 31536000,
     month: 2592000,
-    week: 604800, // uncomment row to ignore
-    day: 86400, // feel free to add your own row
+    day: 86400,
     hour: 3600,
     minute: 60,
     second: 1,
   };
 
-  const year = Math.floor(diff / 31536000);
-  const month = Math.floor(diff / 2592000);
-  const day = Math.floor(diff / 86400);
-  const hour = Math.floor(diff / 3600);
-  const minute = Math.floor(diff / 60);
-  const second = Math.floor(diff / 1);
+  const dateDiff = () => {
+    let delta = Math.abs(newDateFormat.getTime() - Date.now()) / 1000;
+    return Object.entries(timeInSecond).reduce((acc, [key, value]) => {
+      acc[key] = Math.floor(delta / value);
+      delta -= acc[key] * value;
+      return acc;
+    }, {} as options);
+  };
 
-  // for example: {year:0,month:0,week:1,day:2,hour:34,minute:56,second:7}
-  console.log(year, month, day, hour, minute, second);
+  const result = dateDiff();
+
+  if (result.year === 0) {
+    if (result.month === 0) {
+      if (result.day === 0) {
+        if (result.hour === 0) {
+          if (result.minute === 0) {
+            return result.second > 1
+              ? `${result.second} secondes`
+              : `une seconde`;
+          } else {
+            return result.minute > 1 ? `${result.minute} minute` : "une minute";
+          }
+        } else {
+          return result.hour > 1 ? `${result.hour} heures` : "une heure";
+        }
+      } else {
+        return result.day > 1 ? `${result.day} jours` : "un jour";
+      }
+    } else {
+      return result.month > 1 ? `${result.month} mois` : " un mois";
+    }
+  } else {
+    return result.year > 1 ? `${result.year} ans` : "un an";
+  }
 }
+
+type options = {
+  [key: string]: number;
+};
