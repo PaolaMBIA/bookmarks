@@ -4,17 +4,22 @@ export const fetchData = async (
   url: string
 ): Promise<DataModel | undefined> => {
   const result = await (
-    await fetch(`https://noembed.com/embed?dataType=json&url=${url}`)
+    await fetch(
+      `${process.env.REACT_APP_BASE_URL_NOEMBED}embed?dataType=json&url=${url}`
+    )
   ).json();
 
   if (result.video_id) {
     const resultVideo = await (
-      await fetch(`https://api.vimeo.com/videos/${result.video_id}`, {
-        headers: {
-          Accept: "application/json",
-          Authorization: "Bearer 9723603e3958ba8ffae6ec78660ed594",
-        },
-      })
+      await fetch(
+        `${process.env.REACT_APP_BASE_URL_VIMEO}videos/${result.video_id}`,
+        {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${process.env.REACT_APP_TOKEN}`,
+          },
+        }
+      )
     ).json();
 
     const { embed, link, name, user, created_time, release_time, duration } =
@@ -36,7 +41,7 @@ export const fetchData = async (
 
     const resultPhoto = await (
       await fetch(
-        `https://api.flickr.com/services/rest?method=flickr.photos.getInfo&api_key=a3990db4c7289451bcce7d6d5db81ed9&photo_id=${photo_id}&format=json&nojsoncallback=1`
+        `${process.env.REACT_APP_BASE_URL_FLICK}services/rest?method=flickr.photos.getInfo&api_key=${process.env.REACT_APP_API_KEY}&photo_id=${photo_id}&format=json&nojsoncallback=1`
       )
     ).json();
 
