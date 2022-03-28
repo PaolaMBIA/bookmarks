@@ -38,7 +38,7 @@ function Dashboard() {
         <button type="submit">Confirmer</button>
       </form>
 
-      {bookmarks && (
+      {bookmarks.length !== 0 && (
         <BookmarksList bookmarks={bookmarks} setBookmarks={setBookmarks} />
       )}
     </div>
