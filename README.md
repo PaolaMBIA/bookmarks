@@ -1,10 +1,11 @@
 This project was bootstrapped with [Create React App](https://create-react-app.dev/)
 
-## Getting Started
 
 ## Pre-Requisites
 
 - NodeJS vs16.13.x 
+
+## Getting Started
 
 ### Retrieve Project
 
